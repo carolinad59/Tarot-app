@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Generador de Iconos PWA</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #0b132b; color: white; }
+    canvas { border: 1px solid gold; margin: 10px; }
+    button { padding: 10px 20px; background: #d4af37; color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Iconos PWA - Tarot</h1>
+  <p>Abre la consola del navegador (F12) después de hacer click en los botones para ver los pasos.</p>
+  
+  <button onclick="generateIcon(192)">Generar icon-192.png</button>
+  <button onclick="generateIcon(512)">Generar icon-512.png</button>
+  <button onclick="generateScreenshot()">Generar screenshot-540x720.png</button>
+  
+  <div id="preview"></div>
+
+  <script>
+    function generateIcon(size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      // Fondo gradiente
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#0b132b');
+      gradient.addColorStop(1, '#1c2541');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // Borde dorado
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = size / 10;
+      ctx.strokeRect(size / 10, size / 10, size - size / 5, size - size / 5);
+      
+      // Símbolo de tarot (estrella)
+      ctx.fillStyle = '#d4af37';
+      ctx.font = `bold ${size / 2}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🔮', size / 2, size / 2);
+      
+      // Descargar
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `icon-${size}.png`;
+        a.click();
+        console.log(`✓ icon-${size}.png generado`);
+      });
+      
+      document.getElementById('preview').innerHTML += `<p>✓ icon-${size}.png generado. Descárgalo a la carpeta /tarot-app</p>`;
+    }
+
+    function generateScreenshot() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 540;
+      canvas.height = 720;
+      const ctx = canvas.getContext('2d');
+      
+      // Fondo
+      const gradient = ctx.createLinearGradient(0, 0, 540, 720);
+      gradient.addColorStop(0, '#0b132b');
+      gradient.addColorStop(1, '#1c2541');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 540, 720);
+      
+      // Título
+      ctx.fillStyle = '#d4af37';
+      ctx.font = 'bold 40px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('Tarot de Marsella', 270, 80);
+      
+      // Rectángulo simulando play area
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(90, 150, 360, 400);
+      ctx.fillStyle = '#d4af37';
+      ctx.font = '120px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🔮', 270, 350);
+      
+      // Footer
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '16px Arial';
+      ctx.fillText('Consulta tus cartas del tarot', 270, 650);
+      
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'screenshot-540x720.png';
+        a.click();
+        console.log('✓ screenshot-540x720.png generado');
+      });
+      
+      document.getElementById('preview').innerHTML += `<p>✓ screenshot-540x720.png generado. Descárgalo a la carpeta /tarot-app</p>`;
+    }
+  </script>
+</body>
+</html>
