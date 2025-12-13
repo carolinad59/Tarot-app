@@ -2,11 +2,28 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#d4af37" />
   <meta name="description" content="Tu app de Tarot, consulta las cartas del día y problemas/soluciones." />
+  
+  <!-- PWA Manifest -->
   <link rel="manifest" href="./manifest.json" />
+  
+  <!-- iPhone Home Screen Icon (180x180 para iPhone 6 Plus en 3x) -->
   <link rel="apple-touch-icon" href="./icon-192.png" />
+  
+  <!-- iPhone Splash Screen (2436x1125 para iPhone X/11 Pro) -->
+  <link rel="apple-touch-startup-image" href="./splash-screen.png" />
+  
+  <!-- iPhone Standalone Mode -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tarot de Marsella" />
+  
+  <!-- Fullscreen Display -->
+  <meta name="apple-mobile-web-app-status-bar" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  
   <title>Tarot de Marsella</title>
 
   <!-- Estilos base (optimizado iPhone) -->
@@ -33,6 +50,50 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(45, 27, 78, 0.12) 0%, transparent 50%);
+      animation: nebulaDrift 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, rgba(255, 255, 255, 0)),
+        radial-gradient(2px 2px at 60% 70%, white, rgba(255, 255, 255, 0)),
+        radial-gradient(1px 1px at 50% 50%, white, rgba(255, 255, 255, 0)),
+        radial-gradient(1px 1px at 80% 10%, white, rgba(255, 255, 255, 0)),
+        radial-gradient(2px 2px at 90% 60%, white, rgba(255, 255, 255, 0)),
+        radial-gradient(1px 1px at 30% 80%, white, rgba(255, 255, 255, 0)),
+        radial-gradient(1px 1px at 10% 40%, white, rgba(255, 255, 255, 0));
+      background-repeat: repeat;
+      background-size: 200% 200%;
+      animation: starfield 40s linear infinite;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes nebulaDrift {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, -20px); }
+    }
+
+    @keyframes starfield {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 200%; }
     }
 
     #app {
@@ -40,6 +101,23 @@
       max-width: 390px; /* iPhone 15 width */
       transform-origin: center;
       text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    body.tirada-1 {
+      background: linear-gradient(180deg, #0b132b 0%, #1c2541 50%, #2d1b4e 100%);
+      transition: background 2s ease-in-out;
+    }
+
+    body.tirada-2 {
+      background: linear-gradient(180deg, #0b132b 0%, #1c3a4e 50%, #1a2d3a 100%);
+      transition: background 2s ease-in-out;
+    }
+
+    body.tirada-menu {
+      background: linear-gradient(180deg, var(--azul-oscuro), var(--azul-noche));
+      transition: background 2s ease-in-out;
     }
 
     h1 {
@@ -161,10 +239,7 @@
       opacity: 0;
     }
 
-    .carta.seleccionada {
-      transform: rotateY(180deg);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.45);
-    }
+
 
     .carta.repartiendo {
       position: relative;
@@ -178,7 +253,33 @@
     }
 
     .carta.flip-slow {
-      transition: transform 0.9s ease, background 0.3s ease, color 0.3s ease;
+      transition: transform 1.4s ease-in-out, box-shadow 0.8s ease, filter 0.8s ease;
+    }
+
+    .carta.seleccionada {
+      transform: rotateY(180deg);
+      box-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 12px 24px rgba(0,0,0,0.45);
+      filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.5));
+      animation: cardGlow 1.2s ease-in-out forwards;
+    }
+
+    @keyframes cardGlow {
+      0% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.3), 0 8px 16px rgba(0,0,0,0.3); }
+      50% { box-shadow: 0 0 32px rgba(212, 175, 55, 0.9), 0 12px 28px rgba(0,0,0,0.5); }
+      100% { box-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 12px 24px rgba(0,0,0,0.45); }
+    }
+
+    .carta.seleccionada {
+      transform: rotateY(180deg);
+      box-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 12px 24px rgba(0,0,0,0.45);
+      filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.5));
+      animation: cardGlow 1.2s ease-in-out forwards;
+    }
+
+    @keyframes cardGlow {
+      0% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.3), 0 8px 16px rgba(0,0,0,0.3); }
+      50% { box-shadow: 0 0 32px rgba(212, 175, 55, 0.9), 0 12px 28px rgba(0,0,0,0.5); }
+      100% { box-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 12px 24px rgba(0,0,0,0.45); }
     }
 
     .carta:hover {

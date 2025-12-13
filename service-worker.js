@@ -1,10 +1,14 @@
-const CACHE_NAME = "tarot-cache-v15"; // bump para forzar actualización de assets
+const CACHE_NAME = "tarot-cache-v18"; // bump para incluir splash screen e icons
 const urlsToCache = [
   "./",
   "./index.html",
   "./app.js",
   "./style.css",
-  "./manifest.json"
+  "./manifest.json",
+  "./splash-screen.png",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./screenshot-540x720.png"
 ];
 
 // Instalación: cacheamos los archivos

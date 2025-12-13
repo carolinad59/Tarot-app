@@ -238,6 +238,10 @@ function barajarBaraja(baraja) {
             const titulo = btn.querySelector('.tirada-title')?.textContent || 'Tarot';
             pageTitle.textContent = titulo;
 
+            // Aplicar gradiente según tirada
+            document.body.classList.remove('tirada-menu', 'tirada-1', 'tirada-2');
+            document.body.classList.add(`tirada-${numCartasTirada}`);
+
             console.log('Cartas de la tirada:', numCartasTirada);
         });
     });
@@ -348,12 +352,14 @@ function seleccionarCarta(divCarta, carta) {
 
   if (divCarta.classList.contains('seleccionada')) return;
 
-  // Flip lento
+  // Flip lento con glow místico
   divCarta.classList.add('flip-slow');
-  divCarta.classList.add('seleccionada');
   setTimeout(() => {
     divCarta.style.backgroundImage = `url("${divCarta.dataset.front}")`;
-  }, 450); // texto aparece tras iniciar giro
+  }, 700); // imagen aparece en el medio del giro (1.4s / 2)
+  setTimeout(() => {
+    divCarta.classList.add('seleccionada');
+  }, 10); // aplicar clase para activar glow
 
   cartasSeleccionadas.push(carta);
 
@@ -429,6 +435,10 @@ btnVolver.addEventListener('click', () => {
   subtitle.style.display = 'block';
   footerHint.style.display = 'block';
   pageTitle.style.display = 'block';
+
+  // Volver al gradiente del menú
+  document.body.classList.remove('tirada-1', 'tirada-2');
+  document.body.classList.add('tirada-menu');
 
   // restaurar mazo y controles
   barajaCerrada.style.display = 'flex';

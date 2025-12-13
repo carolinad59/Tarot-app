@@ -4,7 +4,7 @@
   "description": "Tu app de Tarot, consulta las cartas del día y problemas/soluciones.",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait-primary",
   "background_color": "#0b132b",
   "theme_color": "#d4af37",
