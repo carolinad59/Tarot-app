@@ -609,7 +609,22 @@
         });
       } else {
         navigator.serviceWorker.register('/service-worker.js')
-          .then(() => console.log('Service Worker registrado'))
+          .then(reg => {
+            console.log('Service Worker registrado');
+            // Check for updates every time the page loads
+            reg.update();
+            // Listen for new service worker waiting to activate
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New SW is ready, force reload to get fresh content
+                  console.log('Nueva versión disponible, recargando...');
+                  window.location.reload();
+                }
+              });
+            });
+          })
           .catch(err => console.log('Error registrando SW:', err));
       }
     }

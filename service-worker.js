@@ -1,4 +1,4 @@
-const CACHE_NAME = "tarot-cache-v18"; // bump para incluir splash screen e icons
+const CACHE_NAME = "tarot-cache-v30"; // Forced update for fresh content
 const urlsToCache = [
   "./",
   "./index.html",
