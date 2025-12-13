@@ -51,7 +51,7 @@
       align-items: center;
       padding: 20px;
       position: relative;
-      overflow: hidden;
+      overflow: auto;
     }
 
     body::before {
@@ -99,10 +99,16 @@
     #app {
       width: 100%;
       max-width: 390px; /* iPhone 15 width */
+      min-height: 100vh; /* Prevent layout shifts when toggling screens */
       transform-origin: center;
       text-align: center;
       position: relative;
       z-index: 10;
+    }
+    
+    /* Only add spacing for main menu */
+    #pantalla-tiradas {
+      margin-top: 120px;
     }
 
     body.tirada-1 {
@@ -123,6 +129,7 @@
     h1 {
       font-size: 2rem;
       margin-bottom: 10px;
+      margin-top: 20px;
       color: var(--dorado);
     }
 
@@ -148,7 +155,7 @@
       cursor: pointer;
       transition: all 0.25s ease;
       position: relative;
-      overflow: hidden;
+      overflow: auto;
     }
 
     .tirada-btn::before {
@@ -216,7 +223,7 @@
       background-position: center;
       background-repeat: no-repeat;
       position: relative;
-      overflow: hidden;
+      overflow: auto;
     }
 
     .carta::before,
@@ -312,17 +319,19 @@
       width: 100%;
       display: block;
       text-align: center;
+      margin-top: -100px; /* Pull title up to top */
     }
 
     #play-area {
       width: 360px;
-      height: 720px;
+        /* Increase height to accommodate 22 smaller cards */
+        height: 620px;
       border-radius: 16px;
       background: transparent;
       box-shadow: none;
       border: 3px solid var(--dorado);
       position: relative;
-      overflow: hidden;
+        overflow: hidden;
       margin: 0 auto 16px;
     }
 
@@ -392,9 +401,11 @@
 
     #mesa-cartas {
       position: absolute;
-      inset: 16px;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      inset: 12px;
+      /* Use 5 columns so more cards fit vertically within reduced height */
+        /* 5 columns, tighter gaps to fit 22 cards */
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
       align-content: start;
       display: none;
       justify-items: center;
@@ -404,18 +415,13 @@
       display: grid;
     }
 
-
-    .carta:nth-child(21),
-    .carta:nth-child(22) {
-      grid-column: auto;
-    }
-
+    /* Position last 2 cards (21 and 22) on sides: columns 1 and 5 */
     #mesa-cartas > .carta:nth-child(21) {
-      grid-column: 2;
+      grid-column: 1;
     }
 
     #mesa-cartas > .carta:nth-child(22) {
-      grid-column: 3;
+      grid-column: 5;
     }
 
     #btn-barajar {
@@ -530,10 +536,11 @@
   <div id="app">
     <!-- Flecha volver global (oculta en menú principal) -->
     <button id="btn-volver" class="btn-volver" aria-label="Volver" style="display:none;">↩︎</button>
-    <h1 id="page-title">🔮 Tarot</h1>
-    <p class="subtitle">Elige tu tirada</p>
-
-    <div class="tiradas" id="pantalla-tiradas">
+    
+    <div id="pantalla-tiradas">
+      <h1 id="page-title">🔮 Tarot</h1>
+      <p class="subtitle">Elige tu tirada</p>
+      <div class="tiradas">
       <button class="tirada-btn" data-cards="1">
         <div class="tirada-title">Carta del día</div>
         <div class="tirada-desc">Una guía para tu jornada</div>
@@ -543,13 +550,14 @@
         <div class="tirada-title">Problema y solución</div>
         <div class="tirada-desc">Comprende y avanza</div>
       </button>
+      </div>
     </div>
 
     <!-- Pantalla baraja -->
     <div id="pantalla-baraja" style="display:none; margin-top:16px;">
 
     <!-- Área fija amarilla (hogar de baraja y cartas) -->
-    <div id="play-area">
+    <div id="play-area" style="height:620px;">
       <!-- Baraja cerrada / carta en el centro en primer menú -->
       <div id="baraja-cerrada">
       </div>
@@ -588,11 +596,24 @@
 <script src="app.js"></script>
 
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(() => console.log('Service Worker registrado'))
-      .catch(err => console.log('Error registrando SW:', err));
-  }
+  // Dev toggle: add ?dev=1 to the URL to disable Service Worker during development
+  (function() {
+    const isDev = location.search.includes('dev=1') || localStorage.getItem('disableSW') === 'true';
+    if ('serviceWorker' in navigator) {
+      if (isDev) {
+        // Persist dev preference so regular reloads keep SW disabled
+        localStorage.setItem('disableSW', 'true');
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(reg => reg.unregister());
+          console.log('SW unregistered for dev');
+        });
+      } else {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(() => console.log('Service Worker registrado'))
+          .catch(err => console.log('Error registrando SW:', err));
+      }
+    }
+  })();
 </script>
 
 </body>
