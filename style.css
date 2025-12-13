@@ -1,0 +1,124 @@
+.btn-volver {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  background: transparent;
+  border: none;
+  color: var(--blanco);
+  font-size: 1.4rem;
+  cursor: pointer;
+  z-index: 1000;
+}
+.carta {
+  width: 70px;
+  height: 110px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1c2541, #0b132b);
+  border: 1.5px solid var(--dorado);
+  cursor: pointer;
+  transition: transform 0.6s, box-shadow 0.3s, opacity 0.3s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.7rem;
+  color: var(--blanco);
+  backface-visibility: hidden;
+}
+
+.carta.seleccionada {
+  background: var(--dorado);
+  color: #000;
+  transform: rotateY(180deg);
+}
+
+/* Animación: repartir desde la baraja hacia posición final */
+.carta.repartiendo {
+  position: relative;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+.carta.repartida {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Animación: flip lento */
+.carta.flip-slow {
+  transition: transform 0.9s ease, background 0.3s ease, color 0.3s ease;
+}
+
+/* Barajar visual del mazo: 5 movimientos y vuelve a origen */
+#baraja-cerrada.barajando {
+  animation: shuffleDeck 0.45s ease-in-out 5;
+}
+/* Mini-cards inside deck for richer shuffle */
+.deck-cards .mini-card {
+  position: absolute;
+  width: 72px;
+  height: 110px;
+  border-radius: 10px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--blanco);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+}
+.deck-cards .mini-card[data-i="0"] { z-index: 3; }
+.deck-cards .mini-card[data-i="1"] { z-index: 2; }
+.deck-cards .mini-card[data-i="2"] { z-index: 1; }
+
+#baraja-cerrada.barajando .mini-card[data-i="0"] {
+  animation: miniShuffleTop 0.45s ease-in-out 5;
+}
+#baraja-cerrada.barajando .mini-card[data-i="1"] {
+  animation: miniShuffleMid 0.45s ease-in-out 5;
+}
+#baraja-cerrada.barajando .mini-card[data-i="2"] {
+  animation: miniShuffleBot 0.45s ease-in-out 5;
+}
+
+@keyframes miniShuffleTop {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  20%  { transform: translate(calc(-50% - 12px), calc(-50% - 8px)) rotate(-6deg); }
+  40%  { transform: translate(calc(-50% + 10px), calc(-50% + 6px)) rotate(6deg); }
+  60%  { transform: translate(calc(-50% - 8px), calc(-50% + 10px)) rotate(-4deg); }
+  80%  { transform: translate(calc(-50% + 8px), calc(-50% - 6px)) rotate(4deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+@keyframes miniShuffleMid {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  20%  { transform: translate(calc(-50% + 10px), calc(-50% - 6px)) rotate(5deg); }
+  40%  { transform: translate(calc(-50% - 10px), calc(-50% + 8px)) rotate(-5deg); }
+  60%  { transform: translate(calc(-50% + 6px), calc(-50% + 8px)) rotate(3deg); }
+  80%  { transform: translate(calc(-50% - 6px), calc(-50% - 6px)) rotate(-3deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+@keyframes miniShuffleBot {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  20%  { transform: translate(calc(-50% - 8px), calc(-50% + 6px)) rotate(-4deg); }
+  40%  { transform: translate(calc(-50% + 8px), calc(-50% - 6px)) rotate(4deg); }
+  60%  { transform: translate(calc(-50% - 6px), calc(-50% - 8px)) rotate(-3deg); }
+  80%  { transform: translate(calc(-50% + 6px), calc(-50% + 6px)) rotate(3deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+@keyframes shuffleDeck {
+  0%   { transform: translate(0,0) rotate(0deg) scale(1); box-shadow: 0 0 0 rgba(0,0,0,0); }
+  10%  { transform: translate(-6px,-2px) rotate(-2deg) scale(1.02); box-shadow: 0 8px 16px rgba(0,0,0,0.25); }
+  20%  { transform: translate(8px,3px) rotate(2deg) scale(1.02); }
+  30%  { transform: translate(-5px,4px) rotate(-1.5deg) scale(1.02); }
+  40%  { transform: translate(7px,-3px) rotate(1.5deg) scale(1.02); }
+  50%  { transform: translate(-6px,2px) rotate(-2deg) scale(1.02); }
+  60%  { transform: translate(6px,-2px) rotate(2deg) scale(1.02); }
+  70%  { transform: translate(-4px,3px) rotate(-1deg) scale(1.01); }
+  80%  { transform: translate(4px,-3px) rotate(1deg) scale(1.01); }
+  90%  { transform: translate(-2px,1px) rotate(-0.5deg) scale(1); }
+  100% { transform: translate(0,0) rotate(0deg) scale(1); box-shadow: 0 0 0 rgba(0,0,0,0); }
+}
+
+/* Hover sutil en cartas desplegadas */
+.carta:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.35); }

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarot de Marsella</title>
+
+  <!-- Estilos base (optimizado iPhone) -->
+  <style>
+    :root {
+      --azul-oscuro: #0b132b;
+      --azul-noche: #1c2541;
+      --dorado: #d4af37;
+      --dorado-suave: #f1d77a;
+      --blanco: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(180deg, var(--azul-oscuro), var(--azul-noche));
+      color: var(--blanco);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 390px; /* ancho iPhone 15 */
+        transform-origin:center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--dorado);
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-bottom: 30px;
+    }
+
+    .tiradas {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .tirada-btn {
+      background: transparent;
+      border: 1.5px solid var(--dorado);
+      border-radius: 16px;
+      padding: 22px 16px;
+      color: var(--blanco);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tirada-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(212,175,55,0.25), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .tirada-btn:hover::before,
+    .tirada-btn:active::before {
+      opacity: 1;
+    }
+
+    .tirada-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+
+    .tirada-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .tirada-desc {
+      font-size: 0.85rem;
+      opacity: 0.75;
+    }
+
+    .footer-hint {
+      margin-top: 30px;
+      font-size: 0.75rem;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+    <!-- Flecha volver global (oculta en menú principal) -->
+    <button id="btn-volver" class="btn-volver" aria-label="Volver" style="display:none;">↩︎</button>
+    <h1>🔮 Tarot</h1>
+    <p class="subtitle">Elige tu tirada</p>
+
+    <div class="tiradas" id="pantalla-tiradas">
+      <button class="tirada-btn" data-cards="1">
+        <div class="tirada-title">Carta del día</div>
+        <div class="tirada-desc">Una guía para tu jornada</div>
+      </button>
+
+      <button class="tirada-btn" data-cards="2">
+        <div class="tirada-title">Problema y solución</div>
+        <div class="tirada-desc">Comprende y avanza</div>
+      </button>
+    </div>
+
+    <!-- Pantalla baraja -->
+    <div id="pantalla-baraja" style="display:none; margin-top:40px;">
+
+    <!-- Baraja cerrada -->
+    <div id="baraja-cerrada" style="
+        width:120px;
+        height:200px;
+        margin: 0 auto 12px;
+        border-radius:12px;
+        background: linear-gradient(135deg, #1c2541, #0b132b);
+        border: 2px solid var(--dorado);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:2rem;
+    ">
+      <div class="deck-cards" aria-hidden="true" style="position:relative;width:100%;height:100%;">
+        <div class="mini-card" data-i="0">🂠</div>
+        <div class="mini-card" data-i="1">🂠</div>
+        <div class="mini-card" data-i="2">🂠</div>
+      </div>
+    </div>
+
+    <div id="debug-carta" style="font-size:0.85rem; opacity:0.7;"></div>
+
+    <!-- Botón barajar -->
+    <button id="btn-barajar" class="tirada-btn" style="padding:10px;font-size:0.9rem;">
+        Barajar
+    </button>
+
+    </div>
+
+    <div class="footer-hint">Más tiradas pronto ✨</div>
+
+    <!-- Contenedor cartas -->
+    <div id="mesa-cartas" style="
+    display:none;
+    margin-top:30px;
+    grid-template-columns: repeat(4, 1fr);
+    gap:10px;
+    position:relative;
+    ">
+    </div>
+
+    <!-- Botón interpretar -->
+    <button id="btn-interpretar" class="tirada-btn" style="display:none; margin-top:20px;">
+    Interpretar
+    </button>
+
+
+  </div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
