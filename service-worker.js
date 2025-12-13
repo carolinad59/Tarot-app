@@ -1,4 +1,4 @@
-const CACHE_NAME = "tarot-cache-v1";
+const CACHE_NAME = "tarot-cache-v4"; // bump para forzar actualización de assets
 const urlsToCache = [
   "./",
   "./index.html",

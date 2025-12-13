@@ -1,27 +1,30 @@
 const cartasTarot = [
-  { id: 0, nombre: "El Loco" },
-  { id: 1, nombre: "El Mago" },
-  { id: 2, nombre: "La Papisa" },
-  { id: 3, nombre: "La Emperatriz" },
-  { id: 4, nombre: "El Emperador" },
-  { id: 5, nombre: "El Papa" },
-  { id: 6, nombre: "Los Enamorados" },
-  { id: 7, nombre: "El Carro" },
-  { id: 8, nombre: "La Justicia" },
-  { id: 9, nombre: "El Ermitaño" },
-  { id: 10, nombre: "La Rueda de la Fortuna" },
-  { id: 11, nombre: "La Fuerza" },
-  { id: 12, nombre: "El Colgado" },
-  { id: 13, nombre: "La Muerte" },
-  { id: 14, nombre: "La Templanza" },
-  { id: 15, nombre: "El Diablo" },
-  { id: 16, nombre: "La Torre" },
-  { id: 17, nombre: "La Estrella" },
-  { id: 18, nombre: "La Luna" },
-  { id: 19, nombre: "El Sol" },
-  { id: 20, nombre: "El Juicio" },
-  { id: 21, nombre: "El Mundo" }
+  { id: 0, nombre: "El Loco", imagen: "./0 Loco.jpg" },
+  { id: 1, nombre: "El Mago", imagen: "./1 Mago.jpg" },
+  { id: 2, nombre: "La Papisa", imagen: "./2 Papisa.jpg" },
+  { id: 3, nombre: "La Emperatriz", imagen: "./3 Emperatriz.jpg" },
+  { id: 4, nombre: "El Emperador", imagen: "./4 Emperador.jpg" },
+  { id: 5, nombre: "El Papa", imagen: "./5 Papa.jpg" },
+  { id: 6, nombre: "Los Enamorados", imagen: "./6 Enamorado.jpg" },
+  { id: 7, nombre: "El Carro", imagen: "./7 Carro.jpg" },
+  { id: 8, nombre: "La Justicia", imagen: "./8 Justicia.jpg" },
+  { id: 9, nombre: "El Ermitaño", imagen: "./9 Ermitano.jpg" },
+  { id: 10, nombre: "La Rueda de la Fortuna", imagen: "./10 Rueda Fortuna.jpg" },
+  { id: 11, nombre: "La Fuerza", imagen: "./11 Fuerza.jpg" },
+  { id: 12, nombre: "El Colgado", imagen: "./12 Colgado.jpg" },
+  { id: 13, nombre: "La Muerte", imagen: "./13 Muerta.jpg" },
+  { id: 14, nombre: "La Templanza", imagen: "./14 Templanza.jpg" },
+  { id: 15, nombre: "El Diablo", imagen: "./15 Diablo.jpg" },
+  { id: 16, nombre: "La Torre", imagen: "./16 Casa Dios.jpg" },
+  { id: 17, nombre: "La Estrella", imagen: "./17 Estrella.jpg" },
+  { id: 18, nombre: "La Luna", imagen: "./18 Luna.jpg" },
+  { id: 19, nombre: "El Sol", imagen: "./19 Sol.jpg" },
+  { id: 20, nombre: "El Juicio", imagen: "./20 Juicio.jpg" },
+  { id: 21, nombre: "El Mundo", imagen: "./21 Mundo.jpg" }
 ];
+
+const toUrl = (path) => encodeURI(path);
+const cardBackImage = toUrl("./back classic .jpg");
 
 function barajarBaraja(baraja) {
   const copia = [...baraja]; // no tocamos el original
@@ -103,14 +106,8 @@ barajaCerrada.addEventListener('click', () => {
   barajaActual.forEach((carta, index) => {
     const divCarta = document.createElement('div');
     divCarta.classList.add('carta');
-    
-    // Crear el diseño de la parte trasera
-    const cardBack = document.createElement('div');
-    cardBack.classList.add('card-back');
-    const pattern = document.createElement('div');
-    pattern.classList.add('card-back-pattern');
-    cardBack.appendChild(pattern);
-    divCarta.appendChild(cardBack);
+    divCarta.style.backgroundImage = `url("${cardBackImage}")`;
+    divCarta.dataset.front = toUrl(carta.imagen);
 
     // animación de reparto secuencial desde el mazo
     divCarta.classList.add('repartiendo');
@@ -134,7 +131,7 @@ function seleccionarCarta(divCarta, carta) {
   divCarta.classList.add('flip-slow');
   divCarta.classList.add('seleccionada');
   setTimeout(() => {
-    divCarta.textContent = carta.nombre;
+    divCarta.style.backgroundImage = `url("${divCarta.dataset.front}")`;
   }, 450); // texto aparece tras iniciar giro
 
   cartasSeleccionadas.push(carta);
@@ -157,14 +154,20 @@ btnInterpretar.addEventListener('click', () => {
 
   // Mostrar encabezado con nombre de tirada y cartas seleccionadas
   let contenido = '<h3 style="color: var(--dorado); margin-bottom: 16px; font-size: 1.1rem;">' + nombreTirada + '</h3>';
-  contenido += '<div style="margin-top: 20px; border-top: 1px solid var(--dorado); padding-top: 16px;">';
-  
+  contenido += '<div class="interpret-grid">';
+
   cartasSeleccionadas.forEach((carta, index) => {
-    contenido += `<p style="margin: 12px 0;"><strong>${index + 1}. ${carta.nombre}</strong></p>`;
+    const src = toUrl(carta.imagen);
+    contenido += `
+      <div class="interpret-card">
+        <img src="${src}" alt="${carta.nombre}" loading="lazy" />
+        <div class="interpret-name">${index + 1}. ${carta.nombre}</div>
+      </div>
+    `;
   });
-  
+
   contenido += '</div>';
-  
+
   cartasInterpretacion.innerHTML = contenido;
 });
 
