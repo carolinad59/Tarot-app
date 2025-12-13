@@ -38,16 +38,27 @@ function barajarBaraja(baraja) {
     const pantallaTiradas = document.getElementById('pantalla-tiradas');
     const pantallaBaraja = document.getElementById('pantalla-baraja');
     const btnVolver = document.getElementById('btn-volver');
+    const pageTitle = document.getElementById('page-title');
+    const subtitle = document.querySelector('.subtitle');
+    const footerHint = document.querySelector('.footer-hint');
 
     let numCartasTirada = 0;
+    let nombreTirada = '';
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
             numCartasTirada = Number(btn.dataset.cards);
+            nombreTirada = btn.querySelector('.tirada-title')?.textContent || 'Tarot';
 
             pantallaTiradas.style.display = 'none';
             pantallaBaraja.style.display = 'block';
             btnVolver.style.display = 'inline';
+            subtitle.style.display = 'none';
+            footerHint.style.display = 'none';
+
+            // Cambiar título a nombre de la tirada
+            const titulo = btn.querySelector('.tirada-title')?.textContent || 'Tarot';
+            pageTitle.textContent = titulo;
 
             console.log('Cartas de la tirada:', numCartasTirada);
         });
@@ -59,6 +70,8 @@ function barajarBaraja(baraja) {
     const barajaCerrada = document.getElementById('baraja-cerrada');
     const mesaCartas = document.getElementById('mesa-cartas');
     const btnInterpretar = document.getElementById('btn-interpretar');
+    const pantallaInterpretacion = document.getElementById('pantalla-interpretacion');
+    const cartasInterpretacion = document.getElementById('cartas-interpretacion');
 
     let barajaActual = [];
     let cartasSeleccionadas = [];
@@ -72,28 +85,32 @@ function barajarBaraja(baraja) {
       // Re-barajar datos
       barajaActual = barajarBaraja(cartasTarot);
       console.log("Nueva baraja:", barajaActual.map(c => c.nombre));
-      debugCarta.textContent = `Carta superior: ${barajaActual[0].nombre}`;
     });
 
 barajaCerrada.addEventListener('click', () => {
-  // Ocultamos baraja y botón barajar
+  // Segundo menú: mostrar grid dentro del área fija
   barajaCerrada.style.display = 'none';
   btnBarajar.style.display = 'none';
-
-  // Limpiamos mesa
   mesaCartas.innerHTML = '';
-  mesaCartas.style.display = 'grid';
+  mesaCartas.classList.add('active');
 
   // Nos aseguramos de que hay baraja mezclada
   if (barajaActual.length === 0) {
     barajaActual = barajarBaraja(cartasTarot);
   }
 
-  // Creamos las 22 cartas boca abajo
+  // Creamos las 22 cartas boca abajo dentro del área fija
   barajaActual.forEach((carta, index) => {
     const divCarta = document.createElement('div');
     divCarta.classList.add('carta');
-    divCarta.textContent = '🂠';
+    
+    // Crear el diseño de la parte trasera
+    const cardBack = document.createElement('div');
+    cardBack.classList.add('card-back');
+    const pattern = document.createElement('div');
+    pattern.classList.add('card-back-pattern');
+    cardBack.appendChild(pattern);
+    divCarta.appendChild(cardBack);
 
     // animación de reparto secuencial desde el mazo
     divCarta.classList.add('repartiendo');
@@ -123,25 +140,56 @@ function seleccionarCarta(divCarta, carta) {
   cartasSeleccionadas.push(carta);
 
   if (cartasSeleccionadas.length === numCartasTirada) {
-    btnInterpretar.style.display = 'block';
+    btnInterpretar.classList.add('visible');
   }
 }
+
+// Mostrar pantalla de interpretación
+btnInterpretar.addEventListener('click', () => {
+  // Ocultar todo excepto el volver y la pantalla de interpretación
+  pantallaBaraja.style.display = 'none';
+  pantallaTiradas.style.display = 'none';
+  pantallaInterpretacion.style.display = 'block';
+  btnInterpretar.classList.remove('visible');
+  pageTitle.style.display = 'none';
+  subtitle.style.display = 'none';
+  footerHint.style.display = 'none';
+
+  // Mostrar encabezado con nombre de tirada y cartas seleccionadas
+  let contenido = '<h3 style="color: var(--dorado); margin-bottom: 16px; font-size: 1.1rem;">' + nombreTirada + '</h3>';
+  contenido += '<div style="margin-top: 20px; border-top: 1px solid var(--dorado); padding-top: 16px;">';
+  
+  cartasSeleccionadas.forEach((carta, index) => {
+    contenido += `<p style="margin: 12px 0;"><strong>${index + 1}. ${carta.nombre}</strong></p>`;
+  });
+  
+  contenido += '</div>';
+  
+  cartasInterpretacion.innerHTML = contenido;
+});
 
 // Volver al menú principal
 btnVolver.addEventListener('click', () => {
   // reset vistas
   pantallaBaraja.style.display = 'none';
   pantallaTiradas.style.display = 'grid';
+  pantallaInterpretacion.style.display = 'none';
   btnVolver.style.display = 'none';
+  subtitle.style.display = 'block';
+  footerHint.style.display = 'block';
+  pageTitle.style.display = 'block';
 
   // restaurar mazo y controles
   barajaCerrada.style.display = 'flex';
-  btnBarajar.style.display = 'inline-block';
-  mesaCartas.style.display = 'none';
+  btnBarajar.style.display = 'block';
+  mesaCartas.classList.remove('active');
   mesaCartas.innerHTML = '';
-  btnInterpretar.style.display = 'none';
+  btnInterpretar.classList.remove('visible');
   cartasSeleccionadas = [];
   barajaActual = [];
   debugCarta.textContent = '';
+
+  // Título vuelve a Tarot
+  pageTitle.textContent = '🔮 Tarot';
 });
 

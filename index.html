@@ -33,8 +33,8 @@
 
     #app {
       width: 100%;
-      max-width: 390px; /* ancho iPhone 15 */
-        transform-origin:center;
+      max-width: 390px; /* iPhone 15 width */
+      transform-origin: center;
       text-align: center;
     }
 
@@ -103,6 +103,241 @@
       font-size: 0.75rem;
       opacity: 0.6;
     }
+
+    .btn-volver {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      background: transparent;
+      border: none;
+      color: var(--blanco);
+      font-size: 1.4rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .carta {
+      width: 55px;
+      height: 85px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #1c2541, #0b132b);
+      border: 1.5px solid var(--dorado);
+      cursor: pointer;
+      transition: transform 0.6s, box-shadow 0.3s, opacity 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: var(--blanco);
+      backface-visibility: hidden;
+    }
+
+    .carta.seleccionada {
+      background: var(--dorado);
+      color: #000;
+      transform: rotateY(180deg);
+    }
+
+    .carta.repartiendo {
+      position: relative;
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+
+    .carta.repartida {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .carta.flip-slow {
+      transition: transform 0.9s ease, background 0.3s ease, color 0.3s ease;
+    }
+
+    .carta:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+    }
+
+    #baraja-cerrada.barajando {
+      animation: shuffleDeck 0.45s ease-in-out 5;
+    }
+
+    @keyframes shuffleDeck {
+      0%   { transform: translate(0,0) rotate(0deg) scale(1); box-shadow: 0 0 0 rgba(0,0,0,0); }
+      10%  { transform: translate(-3px,-1px) rotate(-2deg) scale(1.02); box-shadow: 0 8px 16px rgba(0,0,0,0.25); }
+      20%  { transform: translate(4px,1px) rotate(2deg) scale(1.02); }
+      30%  { transform: translate(-2px,2px) rotate(-1.5deg) scale(1.02); }
+      40%  { transform: translate(3px,-1px) rotate(1.5deg) scale(1.02); }
+      50%  { transform: translate(-3px,1px) rotate(-2deg) scale(1.02); }
+      60%  { transform: translate(3px,-1px) rotate(2deg) scale(1.02); }
+      70%  { transform: translate(-2px,1px) rotate(-1deg) scale(1.01); }
+      80%  { transform: translate(2px,-1px) rotate(1deg) scale(1.01); }
+      90%  { transform: translate(-1px,0px) rotate(-0.5deg) scale(1); }
+      100% { transform: translate(0,0) rotate(0deg) scale(1); box-shadow: 0 0 0 rgba(0,0,0,0); }
+    }
+
+    #pantalla-baraja {
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+
+    #play-area {
+      width: 360px;
+      height: 600px;
+      border-radius: 16px;
+      background: transparent;
+      box-shadow: none;
+      border: 3px solid var(--dorado);
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto 16px;
+    }
+
+    #baraja-cerrada {
+      width: 100px;
+      height: 160px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1c2541, #0b132b);
+      border: 2px solid var(--dorado);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .deck-cards {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #mesa-cartas {
+      position: absolute;
+      inset: 16px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      align-content: start;
+      display: none;
+      justify-items: center;
+    }
+
+    #mesa-cartas.active {
+      display: grid;
+    }
+
+    .card-back {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1f3a 0%, #2d1b4e 50%, #1a1f3a 100%);
+      border-radius: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-back::before {
+      content: "✦";
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--dorado);
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+
+    .card-back::after {
+      content: "✦";
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--dorado);
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+
+    .card-back-pattern {
+      width: 85%;
+      height: 85%;
+      border: 2px solid var(--dorado);
+      border-radius: 4px;
+      position: relative;
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .card-back-pattern::before {
+      content: "◈";
+      color: var(--dorado);
+      opacity: 0.7;
+    }
+
+    .card-back-pattern::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 1px dashed var(--dorado);
+      border-radius: 4px;
+      opacity: 0.4;
+    }
+
+    .carta:nth-child(21),
+    .carta:nth-child(22) {
+      grid-column: auto;
+    }
+
+    #mesa-cartas > .carta:nth-child(21) {
+      grid-column: 2;
+    }
+
+    #mesa-cartas > .carta:nth-child(22) {
+      grid-column: 3;
+    }
+
+    #btn-barajar {
+      display: block;
+      width: 360px;
+      margin: 0 auto;
+      padding: 16px 16px;
+      font-size: 1rem;
+      background: transparent;
+      border: 1.5px solid var(--dorado);
+      border-radius: 16px;
+      color: var(--blanco);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-sizing: border-box;
+    }
+
+    #btn-interpretar {
+      display: none;
+      width: 360px;
+      margin: 20px auto 0;
+      padding: 16px 16px;
+      font-size: 1rem;
+      background: transparent;
+      border: 1.5px solid var(--dorado);
+      border-radius: 16px;
+      color: var(--blanco);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-sizing: border-box;
+    }
+
+    #btn-interpretar.visible {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -110,7 +345,7 @@
   <div id="app">
     <!-- Flecha volver global (oculta en menú principal) -->
     <button id="btn-volver" class="btn-volver" aria-label="Volver" style="display:none;">↩︎</button>
-    <h1>🔮 Tarot</h1>
+    <h1 id="page-title">🔮 Tarot</h1>
     <p class="subtitle">Elige tu tirada</p>
 
     <div class="tiradas" id="pantalla-tiradas">
@@ -126,32 +361,25 @@
     </div>
 
     <!-- Pantalla baraja -->
-    <div id="pantalla-baraja" style="display:none; margin-top:40px;">
+    <div id="pantalla-baraja" style="display:none; margin-top:16px;">
 
-    <!-- Baraja cerrada -->
-    <div id="baraja-cerrada" style="
-        width:120px;
-        height:200px;
-        margin: 0 auto 12px;
-        border-radius:12px;
-        background: linear-gradient(135deg, #1c2541, #0b132b);
-        border: 2px solid var(--dorado);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:2rem;
-    ">
-      <div class="deck-cards" aria-hidden="true" style="position:relative;width:100%;height:100%;">
-        <div class="mini-card" data-i="0">🂠</div>
-        <div class="mini-card" data-i="1">🂠</div>
-        <div class="mini-card" data-i="2">🂠</div>
+    <!-- Área fija amarilla (hogar de baraja y cartas) -->
+    <div id="play-area">
+      <!-- Baraja cerrada / carta en el centro en primer menú -->
+      <div id="baraja-cerrada">
+        <div class="card-back">
+          <div class="card-back-pattern"></div>
+        </div>
       </div>
+
+      <!-- Contenedor cartas (segundo menú) -->
+      <div id="mesa-cartas"></div>
     </div>
 
     <div id="debug-carta" style="font-size:0.85rem; opacity:0.7;"></div>
 
     <!-- Botón barajar -->
-    <button id="btn-barajar" class="tirada-btn" style="padding:10px;font-size:0.9rem;">
+    <button id="btn-barajar">
         Barajar
     </button>
 
@@ -159,20 +387,18 @@
 
     <div class="footer-hint">Más tiradas pronto ✨</div>
 
-    <!-- Contenedor cartas -->
-    <div id="mesa-cartas" style="
-    display:none;
-    margin-top:30px;
-    grid-template-columns: repeat(4, 1fr);
-    gap:10px;
-    position:relative;
-    ">
-    </div>
+    
 
     <!-- Botón interpretar -->
-    <button id="btn-interpretar" class="tirada-btn" style="display:none; margin-top:20px;">
+    <button id="btn-interpretar">
     Interpretar
     </button>
+
+    <!-- Pantalla de interpretación -->
+    <div id="pantalla-interpretacion" style="display:none;">
+      <h2 style="color: var(--dorado); margin-bottom: 20px;">Interpretación</h2>
+      <div id="cartas-interpretacion" style="text-align: center; line-height: 1.8; color: var(--blanco); font-size: 1rem;"></div>
+    </div>
 
 
   </div>
