@@ -227,14 +227,54 @@ function barajarBaraja(baraja) {
 
     // Define meanings for each spread
     const spreadsConfig = {
+      'Sí o No': [],
       'Carta del día': [],
       'Problema y solución': ['Problema', 'Solución'],
-      'Pasado, presente y futuro': ['Pasado', 'Presente', 'Futuro']
+      'Pasado, presente y futuro': ['Pasado', 'Presente', 'Futuro'],
+      'La cruz celta': [
+        'Situación actual',
+        'Obstáculo(s)',
+        'Reacción personal',
+        'Influencias pasadas',
+        'Factores ocultos',
+        'Futuro cercano',
+        'Tu actitud',
+        'Entorno y ambiente',
+        'Camino del destino',
+        'Resultado final'
+      ]
+    };
+
+    // Yes/No answers and explanations for each card
+    const yesNoAnswers = {
+      'El Loco': { answer: 'Sí', text: 'Nueva oportunidad y libertad de acción.' },
+      'El Mago': { answer: 'Sí', text: 'Capacidad de actuar y manifestar resultados.' },
+      'La Papisa': { answer: 'Sí', text: 'Sabiduría e intuición para tomar la decisión correcta.' },
+      'La Emperatriz': { answer: 'Sí', text: 'Crecimiento, creatividad y abundancia.' },
+      'El Emperador': { answer: 'Sí', text: 'Estabilidad y control sobre la situación.' },
+      'El Papa': { answer: 'Sí', text: 'Guía y consejos sabios que favorecen la acción.' },
+      'Los Enamorados': { answer: 'Sí', text: 'Unión, armonía y elección positiva.' },
+      'El Carro': { answer: 'Sí', text: 'Avance, victoria y control de la situación.' },
+      'La Justicia': { answer: 'Sí', text: 'Decisión justa y claridad en el resultado.' },
+      'El Ermitaño': { answer: 'Neutral', text: 'Se requiere reflexión e introspección antes de decidir.' },
+      'La Rueda de la Fortuna': { answer: 'Sí', text: 'Cambios positivos y oportunidad que llega.' },
+      'La Fuerza': { answer: 'Sí', text: 'Valentía y perseverancia para superar obstáculos.' },
+      'El Colgado': { answer: 'Neutral', text: 'Pausa y espera necesaria antes de actuar.' },
+      'La Muerte': { answer: 'No', text: 'Final doloroso o transformación inevitable.' },
+      'La Templanza': { answer: 'Sí', text: 'Armonía y equilibrio que favorecen el éxito.' },
+      'El Diablo': { answer: 'No', text: 'Ataduras, manipulación o situaciones dañinas.' },
+      'La Torre': { answer: 'No', text: 'Ruptura, crisis y cambio drástico.' },
+      'La Estrella': { answer: 'Sí', text: 'Esperanza y claridad para avanzar.' },
+      'La Luna': { answer: 'No', text: 'Confusión, engaño o incertidumbre.' },
+      'El Sol': { answer: 'Sí', text: 'Éxito, claridad y resultados positivos.' },
+      'El Juicio': { answer: 'Sí', text: 'Decisión acertada y liberación.' },
+      'El Mundo': { answer: 'Sí', text: 'Culminación, logro y plenitud.' }
     };
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            numCartasTirada = Number(btn.dataset.cards);
+            const cardsValue = btn.dataset.cards;
+            numCartasTirada = cardsValue === 'yesno' ? 1 : Number(cardsValue);
             nombreTirada = btn.querySelector('.tirada-title')?.textContent || 'Tarot';
             significadosPosiciones = spreadsConfig[nombreTirada] || [];
 
@@ -249,8 +289,9 @@ function barajarBaraja(baraja) {
             if (tiradaTitle) tiradaTitle.textContent = titulo;
 
             // Aplicar gradiente según tirada
-            document.body.classList.remove('tirada-menu', 'tirada-1', 'tirada-2');
-            document.body.classList.add(`tirada-${numCartasTirada}`);
+            document.body.classList.remove('tirada-menu', 'tirada-1', 'tirada-2', 'tirada-3', 'tirada-10', 'tirada-yesno');
+            const gradientClass = cardsValue === 'yesno' ? 'tirada-yesno' : `tirada-${numCartasTirada}`;
+            document.body.classList.add(gradientClass);
 
             console.log('Cartas de la tirada:', numCartasTirada);
         });
@@ -291,6 +332,13 @@ function crearCartaElemento(carta) {
 }
 
 function repartirDesdeMazo() {
+  // Show initial counter for multi-card spreads
+  const cardCounter = document.getElementById('card-counter');
+  if (numCartasTirada > 1 && cardCounter) {
+    cardCounter.style.display = 'block';
+    cardCounter.textContent = `Quedan ${numCartasTirada} cartas`;
+  }
+  
   // posición actual del mazo (ya movido)
   const deckRect = barajaCerrada.getBoundingClientRect();
   const deckCenter = {
@@ -361,6 +409,8 @@ function seleccionarCarta(divCarta, carta) {
   if (cartasSeleccionadas.length >= numCartasTirada) return;
 
   if (divCarta.classList.contains('seleccionada')) return;
+  
+  const cardCounter = document.getElementById('card-counter');
 
   // Flip lento con glow místico
   divCarta.classList.add('flip-slow');
@@ -372,6 +422,17 @@ function seleccionarCarta(divCarta, carta) {
   }, 10); // aplicar clase para activar glow
 
   cartasSeleccionadas.push(carta);
+  
+  // Update counter
+  const remaining = numCartasTirada - cartasSeleccionadas.length;
+  if (numCartasTirada > 1) {
+    cardCounter.style.display = 'block';
+    if (remaining > 0) {
+      cardCounter.textContent = `Quedan ${remaining} ${remaining === 1 ? 'carta' : 'cartas'}`;
+    } else {
+      cardCounter.textContent = '¡Todas las cartas seleccionadas!';
+    }
+  }
 
   if (cartasSeleccionadas.length === numCartasTirada) {
     btnInterpretar.classList.add('visible');
@@ -387,18 +448,35 @@ function renderInterpretacion() {
 
   let contenido = '<div class="interpret-stage">';
   
-  // Add position meaning if it exists
-  const positionMeaning = significadosPosiciones[interpretIndex];
-  const cardTitle = positionMeaning ? `${positionMeaning}: ${carta.nombre}` : carta.nombre;
+  // Check if this is a yes/no spread
+  const isYesNo = nombreTirada === 'Sí o No';
   
-  contenido += `<h2 style="color: var(--dorado); margin-bottom: 8px;">${cardTitle}</h2>`;
-  contenido += `<img class="interpret-image" src="${src}" alt="${carta.nombre}" loading="lazy" />`;
-  contenido += '<div class="interpret-text-block">';
-  contenido += '<div class="interpret-label">Interpretación</div>';
-  contenido += `<p class="interpret-text">${carta.interpretacion}</p>`;
-  contenido += '<div class="interpret-label" style="margin-top:8px;">Consejo</div>';
-  contenido += `<p class="interpret-text">${carta.consejo}</p>`;
-  contenido += '</div>'; // text block
+  if (isYesNo) {
+    // Yes/No spread: show answer prominently
+    const answerData = yesNoAnswers[carta.nombre];
+    const answer = answerData.answer;
+    const answerText = answerData.text;
+    const answerColor = answer === 'Sí' ? '#4ade80' : answer === 'No' ? '#f87171' : '#fbbf24';
+    contenido += `<h2 style="color: ${answerColor}; font-size: 3rem; margin-bottom: 8px;">${answer}</h2>`;
+    contenido += `<h3 style="color: var(--dorado); margin-bottom: 8px;">${carta.nombre}</h3>`;
+    contenido += `<img class="interpret-image" src="${src}" alt="${carta.nombre}" loading="lazy" style="margin-bottom: 8px;" />`;
+    contenido += '<div class="interpret-text-block">';
+    contenido += `<p class="interpret-text" style="text-align: center; font-size: 1.1rem; margin-top: 4px;">${answerText}</p>`;
+    contenido += '</div>'; // text block
+  } else {
+    // Regular spread: use position meaning
+    const positionMeaning = significadosPosiciones[interpretIndex];
+    const cardTitle = positionMeaning ? `${positionMeaning}: ${carta.nombre}` : carta.nombre;
+    
+    contenido += `<h2 style="color: var(--dorado); margin-bottom: 8px;">${cardTitle}</h2>`;
+    contenido += `<img class="interpret-image" src="${src}" alt="${carta.nombre}" loading="lazy" />`;
+    contenido += '<div class="interpret-text-block">';
+    contenido += '<div class="interpret-label">Interpretación</div>';
+    contenido += `<p class="interpret-text">${carta.interpretacion}</p>`;
+    contenido += '<div class="interpret-label" style="margin-top:8px;">Consejo</div>';
+    contenido += `<p class="interpret-text">${carta.consejo}</p>`;
+    contenido += '</div>'; // text block
+  }
   contenido += '</div>'; // stage
 
   if (hasPrev) {
@@ -471,6 +549,13 @@ btnVolver.addEventListener('click', () => {
   debugCarta.textContent = '';
   interpretIndex = 0;
   repartiendo = false;
+
+  // Reset counter
+  const cardCounter = document.getElementById('card-counter');
+  if (cardCounter) {
+    cardCounter.style.display = 'none';
+    cardCounter.textContent = '';
+  }
 
   // Título vuelve a Tarot
   pageTitle.textContent = '🔮 Tarot';

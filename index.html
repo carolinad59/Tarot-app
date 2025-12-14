@@ -108,7 +108,7 @@
     
     /* Only add spacing for main menu */
     #pantalla-tiradas {
-      margin-top: 120px;
+      margin-top: 60px;
     }
 
     body.tirada-1 {
@@ -119,6 +119,39 @@
     body.tirada-2 {
       background: linear-gradient(180deg, #0b132b 0%, #1c3a4e 50%, #1a2d3a 100%);
       transition: background 2s ease-in-out;
+    }
+
+    body.tirada-3 {
+      background: linear-gradient(180deg, #0b132b 0%, #2d1b4e 50%, #3a1f5e 100%);
+      transition: background 2s ease-in-out;
+    }
+
+    body.tirada-3::before {
+      background: 
+        radial-gradient(circle at 30% 40%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(218, 112, 214, 0.12) 0%, transparent 50%);
+    }
+
+    body.tirada-10 {
+      background: linear-gradient(180deg, #0b132b 0%, #1a3a2d 50%, #0f2820 100%);
+      transition: background 2s ease-in-out;
+    }
+
+    body.tirada-10::before {
+      background: 
+        radial-gradient(circle at 40% 30%, rgba(46, 204, 113, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 60% 80%, rgba(26, 188, 156, 0.10) 0%, transparent 50%);
+    }
+
+    body.tirada-yesno {
+      background: linear-gradient(180deg, #0b132b 0%, #4e1c3a 50%, #3a1428 100%);
+      transition: background 2s ease-in-out;
+    }
+
+    body.tirada-yesno::before {
+      background: 
+        radial-gradient(circle at 25% 50%, rgba(255, 105, 180, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 75% 60%, rgba(186, 85, 211, 0.12) 0%, transparent 50%);
     }
 
     body.tirada-menu {
@@ -547,6 +580,11 @@
       <h1 id="page-title">🔮 Tarot</h1>
       <p class="subtitle">Elige tu tirada</p>
       <div class="tiradas">
+      <button class="tirada-btn" data-cards="yesno">
+        <div class="tirada-title">Sí o No</div>
+        <div class="tirada-desc">Respuesta directa</div>
+      </button>
+
       <button class="tirada-btn" data-cards="1">
         <div class="tirada-title">Carta del día</div>
         <div class="tirada-desc">Una guía para tu jornada</div>
@@ -560,6 +598,11 @@
       <button class="tirada-btn" data-cards="3">
         <div class="tirada-title">Pasado, presente y futuro</div>
         <div class="tirada-desc">Tu línea del tiempo</div>
+      </button>
+
+      <button class="tirada-btn" data-cards="10">
+        <div class="tirada-title">La cruz celta</div>
+        <div class="tirada-desc">Lectura completa y profunda</div>
       </button>
       </div>
     </div>
@@ -579,6 +622,9 @@
     </div>
 
     <div id="debug-carta" style="font-size:0.85rem; opacity:0.7;"></div>
+
+    <!-- Card counter -->
+    <div id="card-counter" style="display:none; font-size:1.1rem; color: var(--dorado); margin-top: 12px; font-weight: 600;"></div>
 
     <!-- Botón barajar -->
     <button id="btn-barajar">
