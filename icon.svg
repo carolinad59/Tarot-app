@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="nightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b132b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1c2541;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="mysticGlow" cx="50%" cy="45%">
+      <stop offset="0%" style="stop-color:#d4af37;stop-opacity:0.15" />
+      <stop offset="40%" style="stop-color:#2d1b4e;stop-opacity:0.08" />
+      <stop offset="100%" style="stop-color:#0b132b;stop-opacity:0" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#nightGrad)" rx="100"/>
+  
+  <!-- Sun/Moon Circle -->
+  <defs>
+    <linearGradient id="moonGrad" x1="0%" y1="50%" x2="50%" y2="50%">
+      <stop offset="0%" style="stop-color:#8b95a5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d4af37;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="50%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffd700;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Mystic glow around circle -->
+  <circle cx="256" cy="256" r="160" fill="url(#mysticGlow)" opacity="0.8"/>
+  
+  <g filter="url(#softGlow)">
+    <!-- Main circle outline -->
+    <circle cx="256" cy="256" r="130" fill="none" stroke="#d4af37" stroke-width="3" opacity="0.4"/>
+    
+    <!-- Moon side (left half) - silver/blue tones -->
+    <path d="M 256 126 A 130 130 0 0 0 256 386 Z" 
+          fill="#9ca8b8" 
+          opacity="1"/>
+    
+    <!-- Sun side (right half) - golden tones -->
+    <path d="M 256 126 A 130 130 0 0 1 256 386 Z" 
+          fill="#ffd700" 
+          opacity="1"/>
+    
+    <!-- Center dividing line with glow -->
+    <line x1="256" y1="126" x2="256" y2="386" 
+          stroke="#d4af37" 
+          stroke-width="2" 
+          opacity="0.6"
+          filter="url(#glow)"/>
+    
+    <!-- Moon crescent face on left -->
+    <path d="M 200 220 Q 180 256 200 292 Q 210 256 200 220" 
+          fill="#0b132b" 
+          opacity="0.3"/>
+    <circle cx="190" cy="240" r="4" fill="#0b132b" opacity="0.5"/>
+    <circle cx="190" cy="272" r="4" fill="#0b132b" opacity="0.5"/>
+    
+    <!-- Sun rays on right -->
+    <g stroke="#ffd700" stroke-width="3" opacity="0.8">
+      <line x1="320" y1="180" x2="345" y2="155"/>
+      <line x1="350" y1="210" x2="380" y2="210"/>
+      <line x1="365" y1="256" x2="395" y2="256"/>
+      <line x1="350" y1="302" x2="380" y2="302"/>
+      <line x1="320" y1="332" x2="345" y2="357"/>
+    </g>
+    
+    <!-- Sun center circle -->
+    <circle cx="310" cy="256" r="15" fill="#fff4d4" opacity="0.6"/>
+  </g>
+</svg>

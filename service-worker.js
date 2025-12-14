@@ -1,4 +1,4 @@
-const CACHE_NAME = "tarot-cache-v30"; // Forced update for fresh content
+const CACHE_NAME = "tarot-cache-v31"; // New SVG icon
 const urlsToCache = [
   "./",
   "./index.html",
@@ -6,8 +6,7 @@ const urlsToCache = [
   "./style.css",
   "./manifest.json",
   "./splash-screen.png",
-  "./icon-192.png",
-  "./icon-512.png",
+  "./icon.svg",
   "./screenshot-540x720.png"
 ];
 

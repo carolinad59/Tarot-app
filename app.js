@@ -223,11 +223,20 @@ function barajarBaraja(baraja) {
 
     let numCartasTirada = 0;
     let nombreTirada = '';
+    let significadosPosiciones = [];
+
+    // Define meanings for each spread
+    const spreadsConfig = {
+      'Carta del día': [],
+      'Problema y solución': ['Problema', 'Solución'],
+      'Pasado, presente y futuro': ['Pasado', 'Presente', 'Futuro']
+    };
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
             numCartasTirada = Number(btn.dataset.cards);
             nombreTirada = btn.querySelector('.tirada-title')?.textContent || 'Tarot';
+            significadosPosiciones = spreadsConfig[nombreTirada] || [];
 
             pantallaTiradas.style.display = 'none';
             pantallaBaraja.style.display = 'block';
@@ -377,7 +386,12 @@ function renderInterpretacion() {
   const hasNext = interpretIndex < cartasSeleccionadas.length - 1;
 
   let contenido = '<div class="interpret-stage">';
-  contenido += `<h2 style="color: var(--dorado); margin-bottom: 8px;">${carta.nombre}</h2>`;
+  
+  // Add position meaning if it exists
+  const positionMeaning = significadosPosiciones[interpretIndex];
+  const cardTitle = positionMeaning ? `${positionMeaning}: ${carta.nombre}` : carta.nombre;
+  
+  contenido += `<h2 style="color: var(--dorado); margin-bottom: 8px;">${cardTitle}</h2>`;
   contenido += `<img class="interpret-image" src="${src}" alt="${carta.nombre}" loading="lazy" />`;
   contenido += '<div class="interpret-text-block">';
   contenido += '<div class="interpret-label">Interpretación</div>';
