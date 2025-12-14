@@ -217,6 +217,7 @@ function barajarBaraja(baraja) {
     const pantallaBaraja = document.getElementById('pantalla-baraja');
     const btnVolver = document.getElementById('btn-volver');
     const pageTitle = document.getElementById('page-title');
+    const tiradaTitle = document.getElementById('tirada-title');
     const subtitle = document.querySelector('.subtitle');
     const footerHint = document.querySelector('.footer-hint');
 
@@ -236,7 +237,7 @@ function barajarBaraja(baraja) {
 
             // Cambiar título a nombre de la tirada
             const titulo = btn.querySelector('.tirada-title')?.textContent || 'Tarot';
-            pageTitle.textContent = titulo;
+            if (tiradaTitle) tiradaTitle.textContent = titulo;
 
             // Aplicar gradiente según tirada
             document.body.classList.remove('tirada-menu', 'tirada-1', 'tirada-2');
@@ -376,6 +377,7 @@ function renderInterpretacion() {
   const hasNext = interpretIndex < cartasSeleccionadas.length - 1;
 
   let contenido = '<div class="interpret-stage">';
+  contenido += `<h2 style="color: var(--dorado); margin-bottom: 8px;">${carta.nombre}</h2>`;
   contenido += `<img class="interpret-image" src="${src}" alt="${carta.nombre}" loading="lazy" />`;
   contenido += '<div class="interpret-text-block">';
   contenido += '<div class="interpret-label">Interpretación</div>';
